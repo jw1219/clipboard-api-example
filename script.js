@@ -1,9 +1,10 @@
-const codeEls = document.querySelectorAll('.coupon input')
-const tooltipEls = document.querySelectorAll('.tooltip')
+const codeEls = document.querySelectorAll('input[name^="coupon-code-"]')
+const tooltips = document.querySelectorAll('.tooltip')
 const form = document.querySelector('form')
-const codeInputEl = document.querySelector('input[name=code-input]')
-const validCodes = Array.from(codeEls).map(codeEl => codeEl.value)
+const codeInput = document.querySelector('input[name=code-input]')
+
 let timeout
+
 const handleCopy = el => {
   return () => {
     navigator.clipboard.writeText(el.value)
@@ -13,7 +14,7 @@ const handleCopy = el => {
          * hide all currently displayed tooltips
          * if there is any
          */
-        tooltipEls.forEach(tooltip => tooltip.style.display = 'none')
+        tooltips.forEach(tooltip => tooltip.style.display = 'none')
         /**
          * select and display the tooltip for the clicked coupon
          */
@@ -39,7 +40,10 @@ const handleCopy = el => {
 const handleSubmit = (event) => {
   event.preventDefault()
   const formData = new FormData(form)
-  alert(`Coupon Code ${formData.get('code-input')} has been applied successfully.`)
+  const code = formData.get('code-input')
+  formData.set('code-input', '')
+  codeInput.value = ''
+  alert(`Coupon Code ${code} has been applied successfully.`)
 }
 for (const codeEl of codeEls) {
   codeEl.addEventListener('click', handleCopy(codeEl))
