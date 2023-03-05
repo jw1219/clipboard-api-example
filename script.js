@@ -7,29 +7,42 @@ let timeout
 
 const handleCopy = el => {
   return () => {
+    /**
+     * 1. copy coupon code to clipboard
+     */
     navigator.clipboard.writeText(el.value)
       .then(() => {
+        /**
+         * 2. select and highlight clicked coupon code
+         */
         el.setSelectionRange(0, -1)
         /**
-         * hide all currently displayed tooltips
-         * if there is any
+         * 3. hide all currently displayed tooltips
+         *    if there is any
          */
         tooltips.forEach(tooltip => tooltip.style.display = 'none')
         /**
-         * select and display the tooltip for the clicked coupon
+         * 4. select the tooltip for the clicked coupon
          */
         const tooltip = el.nextElementSibling
+        /**
+         * 5. insert the copied code to the tooltip
+         *    before displaying the tooltip
+         */
         const copiedCodeEl = tooltip.querySelector('.copied-code')
         navigator.clipboard.readText()
           .then(code => copiedCodeEl.textContent = code)
         tooltip.style.display = 'block'
         /**
-         * clear any existing timeout
-         * before assigning a new one to the timeout variable
+         * 6. clear any existing timeout
+         *    before assigning a new one to the variable
          */
         if (typeof timeout === 'number') {
           clearTimeout(timeout)
         }
+        /**
+         * 7. display the tooltip for 2 seconds
+         */
         timeout = setTimeout(() => {
           tooltip.style.display = 'none'
           copiedCodeEl.textContent = ''
